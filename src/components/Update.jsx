@@ -12,7 +12,7 @@ function Update() {
   const [ubuy, setBuy] = useState(buy);
   const [usell, setSell] = useState(sell);
   const [ustock, setStock] = useState(stock);
-  const [upicture, setPicture] = useState(null);;
+  const [upicture, setPicture] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleUpdate = (event) => {
@@ -39,6 +39,7 @@ function Update() {
           <div>
             <label htmlFor="name">Name: </label>
             <input
+              required
               type="text"
               name="name"
               className="form-control"
@@ -50,6 +51,7 @@ function Update() {
           <div>
             <label htmlFor="buy">Buy Price:</label>
             <input
+              required
               type="number"
               name="buy"
               className="form-control"
@@ -60,6 +62,7 @@ function Update() {
           <div>
             <label htmlFor="sell">Sell Price:</label>
             <input
+              required
               type="number"
               name="sell"
               className="form-control"
@@ -70,6 +73,7 @@ function Update() {
           <div>
             <label htmlFor="stock">Stock:</label>
             <input
+              required
               type="number"
               name="stock"
               className="form-control"
@@ -81,6 +85,7 @@ function Update() {
             <label htmlFor="picture">Update Picture: </label>
             <br />
             <input
+              required
               type="file"
               accept="image/*"
               onChange={(e) => setPicture(e.target.files[0])}
@@ -95,4 +100,3 @@ function Update() {
 }
 
 export default Update;
-
