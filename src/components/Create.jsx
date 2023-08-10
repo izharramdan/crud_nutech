@@ -116,7 +116,7 @@ function Create() {
   const [buy, setBuy] = useState("");
   const [sell, setSell] = useState("");
   const [stock, setStock] = useState("");
-  const [selectedPicture, setSelectedPicture] = useState(null); // New state for selected image
+  const [picture, setPicture] = useState(null); // New state for selected image
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -139,12 +139,12 @@ function Create() {
       buy: buy,
       sell: sell,
       stock: stock,
-      picture: URL.createObjectURL(selectedPicture),
+      picture: URL.createObjectURL(picture),
     };
 
     dispatch(addItem(newItem));
 
-    setSelectedPicture(null);
+    setPicture(null);
     navigate("/");
   };
 
@@ -201,7 +201,7 @@ function Create() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setSelectedPicture(e.target.files[0])} // Set selected image
+              onChange={(e) => setPicture(e.target.files[0])} // Set selected image
             />
           </div>
           <br />

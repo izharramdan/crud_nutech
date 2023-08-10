@@ -7,11 +7,12 @@ function Update() {
   const { id } = useParams();
   const items = useSelector((state) => state.items);
   const existingItem = items.filter((f) => f.id == id);
-  const { name, buy, sell, stock } = existingItem[0];
+  const { name, buy, sell, stock, picture } = existingItem[0];
   const [uname, setName] = useState(name);
   const [ubuy, setBuy] = useState(buy);
   const [usell, setSell] = useState(sell);
   const [ustock, setStock] = useState(stock);
+  const [upicture, setPicture] = useState(null);;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleUpdate = (event) => {
@@ -23,8 +24,10 @@ function Update() {
         buy: ubuy,
         sell: usell,
         stock: ustock,
+        picture: URL.createObjectURL(upicture),
       })
     );
+    setPicture(null);
     navigate("/");
   };
 
@@ -72,6 +75,15 @@ function Update() {
               className="form-control"
               value={ustock}
               onChange={(e) => setStock(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="picture">Update Picture: </label>
+            <br />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPicture(e.target.files[0])}
             />
           </div>
           <br />
