@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,6 +8,8 @@ import Logo from "/Logo-Nutech-ok.png";
 function Home() {
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const handleDelete = (id) => {
     const confirmed = window.confirm(
@@ -17,6 +19,12 @@ function Home() {
       dispatch(deleteItem({ id: id }));
     }
   };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -33,7 +41,6 @@ function Home() {
             <tr>
               <th>No.</th>
               <th>Picture</th>
-              {/* <th><img src="" alt="" /></th> */}
               <th>Item Name</th>
               <th>Buy Price</th>
               <th>Sell Price</th>
@@ -42,10 +49,9 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
+            {currentItems.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
-                {/* <td>pic</td> */}
+                <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                 <td>
                   {item.picture && (
                     <img
@@ -77,9 +83,40 @@ function Home() {
             ))}
           </tbody>
         </table>
+        <ul className="pagination">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              className="page-link"
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+          </li>
+          {Array.from({ length: Math.ceil(items.length / itemsPerPage) }).map((_, index) => (
+            <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
+              <button
+                onClick={() => paginate(index + 1)}
+                className="page-link"
+              >
+                {index + 1}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === Math.ceil(items.length / itemsPerPage) ? "disabled" : ""}`}>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              className="page-link"
+              disabled={currentPage === Math.ceil(items.length / itemsPerPage)}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   );
 }
 
 export default Home;
+
