@@ -9,6 +9,7 @@ function Home() {
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const itemsPerPage = 5;
 
   const handleDelete = (id) => {
@@ -20,9 +21,13 @@ function Home() {
     }
   };
 
+  const filteredItems = items.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -36,6 +41,15 @@ function Home() {
         <Link to="/create" className="btn btn-success my-3">
           Add Item
         </Link>
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search by Item Name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <table className="table">
           <thead>
             <tr>
@@ -93,21 +107,33 @@ function Home() {
               Previous
             </button>
           </li>
-          {Array.from({ length: Math.ceil(items.length / itemsPerPage) }).map((_, index) => (
-            <li key={index} className={`page-item ${currentPage === index + 1 ? "active" : ""}`}>
-              <button
-                onClick={() => paginate(index + 1)}
-                className="page-link"
-              >
+          {Array.from({
+            length: Math.ceil(filteredItems.length / itemsPerPage),
+          }).map((_, index) => (
+            <li
+              key={index}
+              className={`page-item ${
+                currentPage === index + 1 ? "active" : ""
+              }`}
+            >
+              <button onClick={() => paginate(index + 1)} className="page-link">
                 {index + 1}
               </button>
             </li>
           ))}
-          <li className={`page-item ${currentPage === Math.ceil(items.length / itemsPerPage) ? "disabled" : ""}`}>
+          <li
+            className={`page-item ${
+              currentPage === Math.ceil(filteredItems.length / itemsPerPage)
+                ? "disabled"
+                : ""
+            }`}
+          >
             <button
               onClick={() => paginate(currentPage + 1)}
               className="page-link"
-              disabled={currentPage === Math.ceil(items.length / itemsPerPage)}
+              disabled={
+                currentPage === Math.ceil(filteredItems.length / itemsPerPage)
+              }
             >
               Next
             </button>
@@ -119,4 +145,3 @@ function Home() {
 }
 
 export default Home;
-
