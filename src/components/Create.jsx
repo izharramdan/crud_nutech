@@ -21,7 +21,7 @@ function Create() {
 
     const isNameUnique = items.every((item) => item.name !== name);
     if (!isNameUnique) {
-      setMessageErrorName("Item name must be unique.");
+      setMessageErrorName("this item already exists.");
       return;
     }
 
